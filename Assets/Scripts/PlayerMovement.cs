@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     [SerializeField] private float speed = 6f;
@@ -7,34 +7,36 @@ public class PlayerController : MonoBehaviour {
     private float horizontalAxis;
     private bool isFacingRight = true;
 
-    [SerializeField] private Transform playerTransform;
     [SerializeField] private Rigidbody2D playerRigidBody;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    private float groundCircleRadius = .2f;
 
-    private float mx = 0;
-    public float dashDistance = 15f;
     private bool isDashing = false;
+    public float dashAccelerate = 5000f;
     private float doubleTapTime = 0f;
+    private float dashDelay = .4f;
     private KeyCode lastKeyCode;
 
     private void Update() {
-        mx = Input.GetAxis("Horizontal");
-
         Movement();
         Dash();
         Jump();
     }
 
     private void Dash() {
+        if (!isGrounded()) {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.D)) {
-            if (doubleTapTime > Time.time && lastKeyCode == KeyCode.A) {
+            if (doubleTapTime > Time.time && lastKeyCode == KeyCode.D) {
                 StartCoroutine(PlayerDash(1f));
             } else {
                 doubleTapTime = Time.time + 0.5f;
             }
 
-            lastKeyCode = KeyCode.A;
+            lastKeyCode = KeyCode.D;
         }
 
         if (Input.GetKeyDown(KeyCode.A)) {
@@ -49,19 +51,21 @@ public class PlayerController : MonoBehaviour {
     }
 
     IEnumerator PlayerDash (float direction) {
+        float gravity = playerRigidBody.gravityScale;
+
         isDashing = true;
         playerRigidBody.velocity = new Vector2(playerRigidBody.velocity.x, 0f);
-        playerRigidBody.AddForce(new Vector2(dashDistance * direction, 0f), ForceMode2D.Impulse);
-        float gravity = playerRigidBody.gravityScale;
+        playerRigidBody.AddForce(new Vector2(dashAccelerate * direction, 0f));
         playerRigidBody.gravityScale = 0;
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(dashDelay);
         isDashing = false;
+        
         playerRigidBody.gravityScale = gravity;
     }
 
     private void FixedUpdate() {
-        if (!isDashing) {
-            playerRigidBody.velocity = new Vector2(mx * speed, playerRigidBody.velocity.y);
+        if (isDashing) {
+            return;
         }
 
         playerRigidBody.velocity = new Vector2(horizontalAxis * speed, playerRigidBody.velocity.y);    
@@ -73,7 +77,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private bool isGrounded() {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        return Physics2D.OverlapCircle(groundCheck.position, groundCircleRadius, groundLayer);
     }
     
     private void Jump() {
