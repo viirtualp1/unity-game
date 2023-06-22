@@ -4,22 +4,26 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    private Rigidbody2D rb;
-
-    public Transform player;
-
-    public float speed;
-    public float agrDistance;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Transform Player;
+    [SerializeField] private float speed;
+    [SerializeField] private float agrDistance;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-
     void Update()
     {
-        float distTopPlayer = Vector2.Distance(transform.position, player.position);
+        CheckMilfHunter();
+    }
+
+    void CheckMilfHunter()
+    {
+        float distTopPlayer = Vector2.Distance(transform.position, Player.position);
     
         if (distTopPlayer < agrDistance)
         {
@@ -28,23 +32,29 @@ public class EnemyController : MonoBehaviour
         else
         {
             StopHunting();
-        }
+        }   
     }
 
     void StartHunting()
     {
-        if (player.position.x < transform.position.x)
-        {
-            rb.velocity = new Vector2(-speed, 0);
-        }
-        else if (player.position.x > transform.position.x)
-        {    
-            rb.velocity = new Vector2(-speed, 0);
-        }
+        if (isGrounded() == true){
+            if (Player.position.x < transform.position.x)
+            {
+                rb.velocity = new Vector2(-speed, 0);
+            }
+            else if (Player.position.x > transform.position.x)
+            {    
+                rb.velocity = new Vector2(speed, 0);
+            }
+        }       
     }
 
     void StopHunting()
     {
         rb.velocity = new Vector2(0, 0);
+    }
+
+    private bool isGrounded() {
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 }

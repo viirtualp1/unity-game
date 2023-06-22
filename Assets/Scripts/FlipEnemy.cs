@@ -6,7 +6,7 @@ public class FlipEnemy : MonoBehaviour
 {
     private Rigidbody2D rb;
 
-    public Transform player;
+    private Transform Player;
 
     void Start()
     {
@@ -15,16 +15,16 @@ public class FlipEnemy : MonoBehaviour
 
     void Update()
     {
-
+        Flip();
     }
 
-    void FlipEnemy()
+    void Flip()
     {
-        if (player.position.x < transform.position.x)
+        if (Player.position.x < transform.position.x)
         {
             transform.localScale = new Vector2(1, 1);
         }
-        else if (player.position.x > transform.position.x)
+        else if (Player.position.x > transform.position.x)
         {    
             transform.localScale = new Vector2(-1, 1);
         }
