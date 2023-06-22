@@ -778,7 +778,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1490806863}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3, y: -4.112, z: 0}
+  m_LocalPosition: {x: -1.3, y: -4.112, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -986,7 +986,7 @@ MonoBehaviour:
   rb: {fileID: 1898478297}
   Player: {fileID: 1490806867}
   speed: 5
-  agrDistance: 15
+  agrDistance: 2
 --- !u!50 &1898478297 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 780208907294272931, guid: 4d5b629d533a18a48bdc577c785b9643, type: 3}
@@ -6006,7 +6006,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f7ce2d0422ea347a3be274792dd189, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1490806867}
 --- !u!1001 &527592362915434558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6089,6 +6088,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3690413720230140878, guid: 4d5b629d533a18a48bdc577c785b9643, type: 3}
       propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732797896528591365, guid: 4d5b629d533a18a48bdc577c785b9643, type: 3}
+      propertyPath: m_FlipX
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5993349666506327394, guid: 4d5b629d533a18a48bdc577c785b9643, type: 3}
